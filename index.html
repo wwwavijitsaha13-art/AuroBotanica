@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Botanica | Skincare & Wellness</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+        :root {
+            --bg-primary: #FAFAF7;
+            --bg-secondary: #EFEBE4;
+            --text-primary: #2C302E;
+            --text-secondary: #6B706D;
+            --accent: #4A5D4E;
+            --accent-hover: #38473B;
+            --border: #D1CDD2;
+            --white: #FFFFFF;
+            --error: #B04B4B;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --transition: all 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background-color: var(--bg-primary); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+        main { flex: 1; }
+        h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 400; color: var(--text-primary); margin-bottom: 1rem; }
+        a { color: var(--text-primary); text-decoration: none; transition: var(--transition); cursor: pointer; }
+        img { max-width: 100%; height: auto; display: block; }
+        button { cursor: pointer; font-family: var(--font-body); border: none; background: none; }
+
+        /* Header & Nav */
+        .top-banner { background-color: var(--accent); color: var(--white); text-align: center; padding: 0.5rem; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
+        header { background-color: var(--bg-primary); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--bg-secondary); }
+        .nav-container { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 600; letter-spacing: 2px; }
+        .logo span { font-weight: 400; font-style: italic; color: var(--accent); }
+        .main-nav { display: flex; gap: 2.5rem; }
+        .main-nav a { text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; position: relative; }
+        .main-nav a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 1px; background-color: var(--accent); transition: var(--transition); }
+        .main-nav a:hover::after { width: 100%; }
+        .nav-actions { display: flex; align-items: center; gap: 1.5rem; }
+        .cart-icon { position: relative; display: flex; align-items: center; }
+        .cart-count { position: absolute; top: -8px; right: -10px; background-color: var(--accent); color: var(--white); font-size: 0.7rem; width: 18px; height: 18px; display: flex; justify-content: center; align-items: center; border-radius: 50%; opacity: 0; transition: var(--transition); }
+        .cart-count.has-items { opacity: 1; }
+        .mobile-menu-btn { display: none; flex-direction: column; gap: 5px; z-index: 101; }
+        .mobile-menu-btn span { width: 25px; height: 2px; background-color: var(--text-primary); transition: var(--transition); }
+
+        /* Footer */
+        footer { background-color: var(--bg-secondary); padding: 4rem 2rem 1rem; margin-top: 4rem; }
+        .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; margin-bottom: 3rem; }
+        .footer-col h3 { font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 0.8rem; }
+        .footer-col ul a { color: var(--text-secondary); }
+        .footer-col ul a:hover { color: var(--accent); }
+        .footer-col p { color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .newsletter-form { display: flex; border-bottom: 1px solid var(--text-primary); }
+        .newsletter-form input { flex: 1; background: none; border: none; padding: 0.8rem 0; outline: none; font-family: var(--font-body); }
+        .newsletter-form button { font-size: 1.5rem; color: var(--text-primary); padding: 0 0.5rem; }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.1); color: var(--text-secondary); font-size: 0.85rem; }
+
+        /* Buttons */
+        .btn { display: inline-block; padding: 1rem 2.5rem; background-color: var(--accent); color: var(--white); text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; font-weight: 500; text-align: center; border: 1px solid var(--accent); transition: var(--transition); }
+        .btn:hover { background-color: var(--accent-hover); color: var(--white); }
+        .btn-outline { background-color: transparent; color: var(--text-primary); border: 1px solid var(--text-primary); }
+        .btn-outline:hover { background-color: var(--text-primary); color: var(--bg-primary); }
+
+        /* Toast */
+        #toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background-color: var(--text-primary); color: var(--white); padding: 1rem 2rem; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(100%); opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        /* Product Card */
+        .product-card { text-align: center; }
+        .product-image-wrapper { position: relative; overflow: hidden; margin-bottom: 1.5rem; background-color: var(--bg-secondary); aspect-ratio: 3/4; }
+        .product-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+        .product-card:hover .product-image-wrapper img { transform: scale(1.05); }
+        .product-actions { position: absolute; bottom: -50px; left: 0; width: 100%; padding: 1rem; transition: var(--transition); opacity: 0; }
+        .product-card:hover .product-actions { bottom: 0; opacity: 1; }
+        .product-actions .btn { width: 100%; padding: 0.8rem; }
+        .product-category { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .product-title { font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .product-price { font-weight: 500; }
+
+        /* Homepage */
+        .hero { position: relative; height: 85vh; min-height: 600px; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--white); background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('hero_bg.jpg'); background-size: cover; background-position: center; }
+        .hero-content { max-width: 800px; padding: 0 2rem; }
+        .hero h1 { font-size: 4rem; color: var(--white); margin-bottom: 1.5rem; line-height: 1.1; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2.5rem; font-weight: 300; }
+        .section { padding: 6rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-size: 2.5rem; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 3rem 2rem; }
+        .feature-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 4rem 0; }
+        .feature-image { height: 100%; min-height: 500px; background-image: url('product_serum.jpg'); background-size: cover; background-position: center; }
+        .feature-content { background-color: var(--bg-secondary); padding: 6rem 4rem; display: flex; flex-direction: column; justify-content: center; }
+        .feature-content h2 { font-size: 3rem; margin-bottom: 1.5rem; }
+        .feature-content p { margin-bottom: 2.5rem; font-size: 1.1rem; color: var(--text-secondary); }
+
+        /* Shop */
+        .shop-header { background-color: var(--bg-secondary); padding: 6rem 2rem; text-align: center; }
+        .shop-header h1 { font-size: 3rem; margin-bottom: 1rem; }
+        .shop-container { max-width: 1400px; margin: 4rem auto; padding: 0 2rem; display: flex; gap: 4rem; }
+        .shop-sidebar { width: 250px; flex-shrink: 0; }
+        .filter-group { margin-bottom: 2rem; }
+        .filter-group h3 { font-size: 1.1rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+        .filter-list { list-style: none; }
+        .filter-list li { margin-bottom: 0.8rem; }
+        .filter-list a { color: var(--text-secondary); font-size: 0.95rem; }
+        .filter-list a:hover, .filter-list a.active { color: var(--accent); font-weight: 500; }
+        .shop-main { flex: 1; }
+        .shop-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+
+        /* Product Detail */
+        .product-detail-container { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .product-gallery { background-color: var(--bg-secondary); aspect-ratio: 3/4; position: relative; overflow: hidden; }
+        .product-gallery img { width: 100%; height: 100%; object-fit: cover; }
+        .product-info-wrapper { display: flex; flex-direction: column; justify-content: center; }
+        .product-info-wrapper h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .product-info-wrapper .price { font-size: 1.5rem; font-weight: 500; margin-bottom: 2rem; }
+        .product-info-wrapper p { margin-bottom: 2rem; color: var(--text-secondary); line-height: 1.8; }
+        .product-details-list { margin-bottom: 2rem; list-style: none; }
+        .product-details-list li { position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .product-details-list li::before { content: '•'; position: absolute; left: 0; color: var(--accent); }
+        .add-to-cart-form { display: flex; gap: 1rem; margin-bottom: 3rem; border-bottom: 1px solid var(--border); padding-bottom: 3rem; }
+        .qty-input { display: flex; border: 1px solid var(--border); align-items: center; }
+        .qty-input button { width: 40px; height: 50px; font-size: 1.2rem; }
+        .qty-input input { width: 50px; height: 50px; text-align: center; border: none; background: transparent; font-family: var(--font-body); font-size: 1rem; outline: none; }
+        .add-to-cart-form .btn { flex: 1; height: 50px; }
+        .accordion { border-bottom: 1px solid var(--border); }
+        .accordion-header { width: 100%; text-align: left; padding: 1rem 0; font-size: 1rem; font-weight: 500; display: flex; justify-content: space-between; align-items: center; }
+        .accordion-header::after { content: '+'; font-size: 1.5rem; font-weight: 300; transition: transform 0.3s ease; }
+        .accordion-header.active::after { content: '-'; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .accordion-content p { padding-bottom: 1rem; margin-bottom: 0; font-size: 0.95rem; }
+        .related-products { margin-top: 6rem; text-align: center; }
+
+        /* Cart */
+        .cart-page { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
+        .cart-page h1 { font-size: 2.5rem; margin-bottom: 3rem; text-align: center; }
+        .cart-container { display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; }
+        .cart-items { border-top: 1px solid var(--border); }
+        .cart-item { display: flex; padding: 2rem 0; border-bottom: 1px solid var(--border); gap: 2rem; }
+        .cart-item-img { width: 120px; height: 160px; object-fit: cover; background-color: var(--bg-secondary); }
+        .cart-item-details { flex: 1; display: flex; flex-direction: column; }
+        .cart-item-title { font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .cart-item-price { font-weight: 500; margin-bottom: 1rem; }
+        .cart-item-actions { margin-top: auto; display: flex; justify-content: space-between; align-items: center; }
+        .remove-btn { text-transform: uppercase; font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 1px; border-bottom: 1px solid transparent; }
+        .remove-btn:hover { color: var(--error); border-bottom-color: var(--error); }
+        .cart-summary { background-color: var(--bg-secondary); padding: 2rem; height: fit-content; }
+        .cart-summary h2 { font-size: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-secondary); }
+        .summary-total { display: flex; justify-content: space-between; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 1.2rem; font-weight: 500; color: var(--text-primary); }
+        .empty-cart { text-align: center; padding: 4rem 0; }
+
+        /* Checkout */
+        .checkout-page { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
+        .checkout-container { display: grid; grid-template-columns: 2fr 1.2fr; gap: 4rem; }
+        .checkout-form-section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-row { display: flex; gap: 1.5rem; }
+        .form-row .form-group { flex: 1; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary); }
+        .form-group input, .form-group select { width: 100%; padding: 0.8rem; border: 1px solid var(--border); font-family: var(--font-body); font-size: 1rem; background-color: transparent; outline: none; }
+        .checkout-summary { background-color: var(--bg-secondary); padding: 2rem; height: fit-content; position: sticky; top: 100px; }
+        .checkout-item { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .checkout-item img { width: 60px; height: 80px; object-fit: cover; }
+        .checkout-item-details { flex: 1; }
+        .checkout-item-title { font-family: var(--font-heading); font-size: 1rem; }
+
+        /* Order Pages */
+        .order-page { max-width: 800px; margin: 6rem auto; padding: 0 2rem; text-align: center; }
+        .order-page-icon { font-size: 4rem; color: var(--accent); margin-bottom: 2rem; }
+        .order-details-box { background-color: var(--white); border: 1px solid var(--border); padding: 3rem; margin-top: 3rem; text-align: left; }
+        .order-meta { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+        .order-meta-item p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.2rem; }
+        .tracking-timeline { position: relative; margin-top: 2rem; padding-left: 2rem; }
+        .tracking-timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background-color: var(--border); }
+        .timeline-item { position: relative; margin-bottom: 2rem; }
+        .timeline-item::before { content: ''; position: absolute; left: -2.35rem; top: 0; width: 1rem; height: 1rem; background-color: var(--bg-primary); border: 2px solid var(--border); border-radius: 50%; }
+        .timeline-item.active::before { border-color: var(--accent); background-color: var(--accent); }
+
+        @media (max-width: 900px) {
+            .footer-container { grid-template-columns: 1fr 1fr; }
+            .feature-split, .shop-container, .product-detail-container, .cart-container, .checkout-container { grid-template-columns: 1fr; gap: 2rem; }
+            .checkout-summary { position: static; order: -1; }
+        }
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: flex; }
+            .main-nav { position: absolute; top: 100%; left: 0; width: 100%; background-color: var(--bg-primary); flex-direction: column; align-items: center; padding: 2rem 0; gap: 1.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease-in-out; }
+            .main-nav.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+            .mobile-menu-btn.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+            .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+            .mobile-menu-btn.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="site-header">
+        <div class="top-banner">Free shipping on all orders over $50</div>
+        <div class="nav-container">
+            <a href="#home" class="logo">AURA<span>BOTANICA</span></a>
+            
+            <button class="mobile-menu-btn" aria-label="Toggle menu" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </button>
+            
+            <nav class="main-nav" id="main-nav">
+                <a href="#home">Home</a>
+                <a href="#shop">Shop All</a>
+                <a href="#shop/skincare">Skincare</a>
+                <a href="#shop/wellness">Wellness</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <a href="#cart" class="cart-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    <span class="cart-count" id="header-cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="app"></main>
+
+    <!-- Footer -->
+    <footer id="site-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <a href="#home" class="logo footer-logo">AURA<span>BOTANICA</span></a>
+                <p>Nourishing your skin and spirit with mindful, botanical ingredients.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Shop</h3>
+                <ul>
+                    <li><a href="#shop">All Products</a></li>
+                    <li><a href="#shop/serums">Serums</a></li>
+                    <li><a href="#shop/cleansers">Cleansers</a></li>
+                    <li><a href="#shop/wellness">Wellness</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>About</h3>
+                <ul>
+                    <li><a href="#home">Our Story</a></li>
+                    <li><a href="#home">Ingredients</a></li>
+                    <li><a href="#home">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Newsletter</h3>
+                <p>Subscribe for updates and 10% off your first order.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed successfully!');">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit">→</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Aura Botanica. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script>
+const products = [
+    { id: 1, name: "Radiance Renewal Serum", price: 45.00, category: "serums", image: "product_serum.jpg", description: "A lightweight, fast-absorbing serum that deeply hydrates and restores your skin's natural glow.", details: ["30ml / 1 oz", "Vegan & Cruelty-Free", "Suitable for all skin types"] },
+    { id: 2, name: "Purifying Botanical Cleanser", price: 28.00, category: "cleansers", image: "product_cleanser.jpg", description: "Gently remove impurities without stripping the skin. Leaves face fresh, clean, and balanced.", details: ["150ml / 5 oz", "Sulfate-Free", "Contains Green Tea Extract"] },
+    { id: 3, name: "Deep Moisture Sleep Mask", price: 52.00, category: "moisturizers", image: "product_serum.jpg", description: "Wake up to plump, hydrated skin. Works with your skin's natural regeneration cycle.", details: ["50ml / 1.7 oz", "Contains Hyaluronic Acid", "Use 2-3 times a week"] },
+    { id: 4, name: "Calm Mind Essential Oil", price: 24.00, category: "wellness", image: "product_cleanser.jpg", description: "A soothing blend of lavender, chamomile, and frankincense. Perfect for unwinding.", details: ["15ml", "100% Pure Essential Oils"] },
+    { id: 5, name: "Rosewater Hydration Mist", price: 22.00, category: "toners", image: "product_serum.jpg", description: "Refresh and tone your skin with pure rosewater. A quick spritz provides instant hydration.", details: ["100ml / 3.4 oz", "Alcohol-free", "Made with organic Damask roses"] },
+    { id: 6, name: "Antioxidant Matcha Mask", price: 35.00, category: "masks", image: "product_cleanser.jpg", description: "Detoxify and brighten with our matcha green tea clay mask.", details: ["60g / 2 oz", "Includes application brush"] },
+    { id: 7, name: "Nourishing Body Butter", price: 40.00, category: "body", image: "product_serum.jpg", description: "Rich, whipped body butter that melts into the skin. Formulated with shea butter.", details: ["200ml / 6.7 oz", "Warm vanilla and almond scent"] },
+    { id: 8, name: "Gua Sha Facial Tool", price: 25.00, category: "tools", image: "product_cleanser.jpg", description: "Enhance your skincare routine with this Rose Quartz Gua Sha.", details: ["100% Natural Rose Quartz", "Comes with a protective pouch"] },
+    { id: 9, name: "Daily Defense SPF 50", price: 32.00, category: "moisturizers", image: "product_serum.jpg", description: "Broad-spectrum mineral sunscreen that leaves no white cast.", details: ["50ml / 1.7 oz", "Reef-safe formula", "Non-comedogenic"] },
+    { id: 10, name: "Revitalizing Eye Cream", price: 48.00, category: "moisturizers", image: "product_cleanser.jpg", description: "Target fine lines and dark circles with this peptide-rich eye cream.", details: ["15ml / 0.5 oz", "Contains caffeine and peptides"] },
+    { id: 11, name: "Herbal Detox Tea Blend", price: 18.00, category: "wellness", image: "product_serum.jpg", description: "Support your body's natural cleansing process with our organic herbal tea.", details: ["30 Tea Bags", "Caffeine-free"] },
+    { id: 12, name: "Clarifying BHA Liquid", price: 30.00, category: "toners", image: "product_cleanser.jpg", description: "A gentle exfoliating liquid that unclogs pores and evens skin tone.", details: ["100ml / 3.4 oz", "May increase sun sensitivity"] },
+    { id: 13, name: "Aromatherapy Sleep Mist", price: 20.00, category: "wellness", image: "product_serum.jpg", description: "Mist over your pillow before bed. The calming scent helps you drift into deep sleep.", details: ["50ml / 1.7 oz", "Safe for linens"] },
+    { id: 14, name: "Vitamin C Brightening", price: 55.00, category: "serums", image: "product_cleanser.jpg", description: "A potent 15% Vitamin C serum that targets dark spots and hyperpigmentation.", details: ["30ml / 1 oz", "Contains Ferulic Acid"] },
+    { id: 15, name: "Gentle Exfoliating Scrub", price: 26.00, category: "cleansers", image: "product_serum.jpg", description: "Buff away dead skin cells with ultra-fine jojoba beads.", details: ["100ml / 3.4 oz", "Microbead-free"] },
+    { id: 16, name: "Hydrating Lip Balm", price: 14.00, category: "moisturizers", image: "product_cleanser.jpg", description: "Lock in moisture with our ultra-nourishing lip balm.", details: ["15g / 0.5 oz", "Long-lasting hydration"] },
+    { id: 17, name: "Jade Facial Roller", price: 22.00, category: "tools", image: "product_serum.jpg", description: "A traditional beauty tool made from natural jade. Helps reduce swelling.", details: ["100% Natural Jade", "Dual-ended design"] },
+    { id: 18, name: "Botanical Bath Salts", price: 28.00, category: "wellness", image: "product_cleanser.jpg", description: "Soak away stress with Himalayan pink salt, Epsom salt, and dried flower petals.", details: ["500g / 17.6 oz", "Soothes tired muscles"] },
+    { id: 19, name: "Overnight Resurfacing", price: 60.00, category: "serums", image: "product_serum.jpg", description: "A leave-on AHA/BHA peel that improves skin texture and clarity while you sleep.", details: ["30ml / 1 oz", "Use 2-3 times a week"] },
+    { id: 20, name: "Soothing Aloe Gel", price: 18.00, category: "body", image: "product_cleanser.jpg", description: "Pure, cold-pressed aloe vera gel. Perfect for calming irritated skin.", details: ["200ml / 6.7 oz", "99% Pure Aloe"] },
+    { id: 21, name: "Collagen Supplement", price: 45.00, category: "wellness", image: "product_serum.jpg", description: "Support skin elasticity and hydration from within.", details: ["30 Servings", "Dairy and gluten-free"] },
+    { id: 22, name: "Squalane Facial Oil", price: 38.00, category: "moisturizers", image: "product_cleanser.jpg", description: "A weightless, biocompatible oil that locks in moisture.", details: ["30ml / 1 oz", "100% Plant-derived Squalane"] },
+    { id: 23, name: "Charcoal Purifying Mask", price: 28.00, category: "masks", image: "product_serum.jpg", description: "Deep clean pores and absorb excess oil with activated charcoal and bentonite clay.", details: ["60g / 2 oz", "Ideal for oily/combination skin"] },
+    { id: 24, name: "Citrus Body Wash", price: 24.00, category: "body", image: "product_cleanser.jpg", description: "Start your day with an invigorating blend of sweet orange and grapefruit.", details: ["250ml / 8.5 oz", "Sulfate-free"] },
+    { id: 25, name: "Silk Sleep Mask", price: 35.00, category: "wellness", image: "product_serum.jpg", description: "Block out light and protect the delicate skin around your eyes.", details: ["One size fits all", "Hand wash only"] },
+    { id: 26, name: "Niacinamide Pore Serum", price: 32.00, category: "serums", image: "product_cleanser.jpg", description: "A 10% Niacinamide serum that visibly minimizes enlarged pores.", details: ["30ml / 1 oz", "Contains Zinc PCA"] },
+    { id: 27, name: "Hydrating Cleansing Balm", price: 34.00, category: "cleansers", image: "product_serum.jpg", description: "Melt away makeup, SPF, and impurities with this luxurious solid balm.", details: ["100ml / 3.4 oz", "Includes muslin cloth"] },
+    { id: 28, name: "Mindful Meditation Candle", price: 40.00, category: "wellness", image: "product_cleanser.jpg", description: "Set the intention for your space with this hand-poured soy candle.", details: ["8 oz", "50+ hour burn time"] },
+    { id: 29, name: "Intensive Hand Cream", price: 18.00, category: "body", image: "product_serum.jpg", description: "Rescue dry, cracked hands with this heavy-duty, non-greasy cream.", details: ["50ml / 1.7 oz", "Fragrance-free option available"] },
+    { id: 30, name: "Probiotic Balancing Mist", price: 26.00, category: "toners", image: "product_cleanser.jpg", description: "Support your skin's microbiome with this refreshing mist.", details: ["100ml / 3.4 oz", "Contains lactobacillus ferment"] }
+];
+
+// Cart State
+let cart = JSON.parse(localStorage.getItem('auraCart')) || [];
+function saveCart() { localStorage.setItem('auraCart', JSON.stringify(cart)); updateCartCount(); }
+function addToCart(id, qty = 1) { 
+    const p = products.find(x => x.id === id); if(!p) return;
+    const item = cart.find(x => x.id === id);
+    if(item) item.quantity += qty; else cart.push({...p, quantity: qty});
+    saveCart(); showToast(`Added ${p.name} to cart!`);
+    if(location.hash === '#cart') renderCart();
+}
+function removeFromCart(id) { cart = cart.filter(x => x.id !== id); saveCart(); if(location.hash === '#cart') renderCart(); }
+function updateQty(id, qty) { 
+    if(qty <= 0) { removeFromCart(id); return; }
+    const item = cart.find(x => x.id === id); if(item) { item.quantity = qty; saveCart(); if(location.hash === '#cart') renderCart(); }
+}
+function getCartTotal() { return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0); }
+function updateCartCount() { 
+    const c = cart.reduce((sum, item) => sum + item.quantity, 0); 
+    const el = document.getElementById('header-cart-count');
+    el.textContent = c; c > 0 ? el.classList.add('has-items') : el.classList.remove('has-items');
+}
+
+// Helpers
+function formatPrice(p) { return '$' + parseFloat(p).toFixed(2); }
+function toggleMenu() { 
+    document.querySelector('.mobile-menu-btn').classList.toggle('active');
+    document.getElementById('main-nav').classList.toggle('active');
+}
+function showToast(msg) {
+    const c = document.getElementById('toast-container');
+    const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+    c.appendChild(t); setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// Router
+const app = document.getElementById('app');
+function router() {
+    let hash = location.hash.slice(1) || 'home';
+    let parts = hash.split('/');
+    let view = parts[0];
+    let param = parts[1];
+    
+    // Reset layout
+    document.getElementById('site-header').style.display = 'block';
+    document.getElementById('site-footer').style.display = 'block';
+
+    if(view === 'home') renderHome();
+    else if(view === 'shop') renderShop(param || 'all');
+    else if(view === 'product') renderProduct(parseInt(param));
+    else if(view === 'cart') renderCart();
+    else if(view === 'checkout') renderCheckout();
+    else if(view === 'order-received') renderOrderReceived();
+    else if(view === 'track') renderTrackOrder();
+    else renderHome();
+    
+    window.scrollTo(0, 0);
+    // Close mobile menu if open
+    document.querySelector('.mobile-menu-btn').classList.remove('active');
+    document.getElementById('main-nav').classList.remove('active');
+}
+
+window.addEventListener('hashchange', router);
+window.addEventListener('load', () => { updateCartCount(); router(); });
+
+// Views
+function renderHome() {
+    app.innerHTML = `
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Awaken Your Skin's Natural Radiance</h1>
+                <p>Mindfully crafted skincare and wellness essentials, powered by nature.</p>
+                <a href="#shop" class="btn">Shop the Collection</a>
+            </div>
+        </section>
+        <section class="section">
+            <div class="section-header"><h2>Featured Rituals</h2><p>Discover our most loved botanical formulations.</p></div>
+            <div class="product-grid" id="home-grid"></div>
+            <div style="text-align: center; margin-top: 4rem;"><a href="#shop" class="btn btn-outline">View All Products</a></div>
+        </section>
+        <div class="feature-split">
+            <div class="feature-image"></div>
+            <div class="feature-content">
+                <h2>Pure Ingredients, Real Results.</h2>
+                <p>We believe in the power of botanical extracts, cold-pressed oils, and earth-derived minerals. Every product is carefully formulated without harsh chemicals. Just clean, effective skincare that honors your body and the planet.</p>
+                <a href="#shop" class="btn">Our Philosophy</a>
+            </div>
+        </div>
+    `;
+    const grid = document.getElementById('home-grid');
+    products.slice(0, 4).forEach(p => grid.appendChild(createProductCard(p)));
+}
+
+function createProductCard(p) {
+    const d = document.createElement('div'); d.className = 'product-card';
+    d.innerHTML = `
+        <div class="product-image-wrapper">
+            <a href="#product/${p.id}"><img src="${p.image}" alt="${p.name}"></a>
+            <div class="product-actions"><button class="btn" onclick="addToCart(${p.id})">Add to Cart</button></div>
+        </div>
+        <div class="product-category">${p.category}</div>
+        <h3 class="product-title"><a href="#product/${p.id}">${p.name}</a></h3>
+        <div class="product-price">${formatPrice(p.price)}</div>
+    `;
+    return d;
+}
+
+function renderShop(category) {
+    app.innerHTML = `
+        <div class="shop-header"><h1>${category === 'all' ? 'All Products' : category.charAt(0).toUpperCase() + category.slice(1)}</h1><p>Thoughtfully formulated for skin and spirit.</p></div>
+        <div class="shop-container">
+            <aside class="shop-sidebar">
+                <div class="filter-group">
+                    <h3>Categories</h3>
+                    <ul class="filter-list">
+                        <li><a href="#shop/all" class="${category === 'all' ? 'active':''}">All Products</a></li>
+                        <li><a href="#shop/cleansers" class="${category === 'cleansers' ? 'active':''}">Cleansers</a></li>
+                        <li><a href="#shop/serums" class="${category === 'serums' ? 'active':''}">Serums</a></li>
+                        <li><a href="#shop/moisturizers" class="${category === 'moisturizers' ? 'active':''}">Moisturizers</a></li>
+                        <li><a href="#shop/wellness" class="${category === 'wellness' ? 'active':''}">Wellness</a></li>
+                        <li><a href="#shop/body" class="${category === 'body' ? 'active':''}">Body Care</a></li>
+                    </ul>
+                </div>
+            </aside>
+            <div class="shop-main">
+                <div class="shop-controls">
+                    <span id="shop-count">0 Products</span>
+                    <select id="sort-select" style="padding:0.5rem; outline:none; border:1px solid var(--border);" onchange="sortShop(this.value, '${category}')">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                </div>
+                <div class="product-grid" id="shop-grid"></div>
+            </div>
+        </div>
+    `;
+    sortShop('featured', category);
+}
+
+window.sortShop = function(sortType, category) {
+    let prods = category === 'all' ? [...products] : products.filter(p => p.category === category);
+    if(sortType === 'price-low') prods.sort((a,b) => a.price - b.price);
+    else if(sortType === 'price-high') prods.sort((a,b) => b.price - a.price);
+    
+    document.getElementById('shop-count').textContent = `${prods.length} Products`;
+    const grid = document.getElementById('shop-grid');
+    grid.innerHTML = '';
+    prods.forEach(p => grid.appendChild(createProductCard(p)));
+};
+
+function renderProduct(id) {
+    const p = products.find(x => x.id === id);
+    if(!p) { app.innerHTML = `<div style="text-align:center; padding: 4rem;"><h2>Product not found</h2><a href="#shop" class="btn">Back to Shop</a></div>`; return; }
+    
+    const details = p.details.map(d => `<li>${d}</li>`).join('');
+    
+    app.innerHTML = `
+        <div class="product-detail-container">
+            <div class="product-gallery"><img src="${p.image}" alt="${p.name}"></div>
+            <div class="product-info-wrapper">
+                <div class="product-category">${p.category}</div>
+                <h1>${p.name}</h1>
+                <div class="price">${formatPrice(p.price)}</div>
+                <p>${p.description}</p>
+                <ul class="product-details-list">${details}</ul>
+                <div class="add-to-cart-form">
+                    <div class="qty-input">
+                        <button onclick="document.getElementById('p-qty').value=Math.max(1, parseInt(document.getElementById('p-qty').value)-1)">-</button>
+                        <input type="number" id="p-qty" value="1" min="1" readonly>
+                        <button onclick="document.getElementById('p-qty').value=parseInt(document.getElementById('p-qty').value)+1">+</button>
+                    </div>
+                    <button class="btn" onclick="addToCart(${p.id}, parseInt(document.getElementById('p-qty').value))">Add to Cart</button>
+                </div>
+                <div class="accordion">
+                    <button class="accordion-header" onclick="this.classList.toggle('active'); this.nextElementSibling.style.maxHeight = this.classList.contains('active') ? this.nextElementSibling.scrollHeight + 'px' : '0'">Ingredients</button>
+                    <div class="accordion-content"><p>Formulated with ethically sourced botanical extracts, cold-pressed oils, and natural minerals.</p></div>
+                </div>
+            </div>
+        </div>
+        <section class="section related-products">
+            <h2>You May Also Like</h2>
+            <div class="product-grid" id="related-grid"></div>
+        </section>
+    `;
+    
+    const grid = document.getElementById('related-grid');
+    products.filter(x => x.category === p.category && x.id !== p.id).slice(0,4).forEach(rp => grid.appendChild(createProductCard(rp)));
+}
+
+function renderCart() {
+    if(cart.length === 0) {
+        app.innerHTML = `<div class="cart-page"><h1>Your Rituals</h1><div class="empty-cart"><p>Your cart is currently empty. Begin your journey.</p><a href="#shop" class="btn">Shop the Collection</a></div></div>`;
+        return;
+    }
+    
+    const itemsHtml = cart.map(item => `
+        <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+            <div class="cart-item-details">
+                <a href="#product/${item.id}" class="cart-item-title">${item.name}</a>
+                <div class="cart-item-price">${formatPrice(item.price)}</div>
+                <div class="cart-item-actions">
+                    <div class="qty-input">
+                        <button onclick="updateQty(${item.id}, ${item.quantity - 1})">-</button>
+                        <input type="number" value="${item.quantity}" readonly>
+                        <button onclick="updateQty(${item.id}, ${item.quantity + 1})">+</button>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    const subtotal = getCartTotal();
+    const shipping = subtotal > 50 ? 0 : 5.00;
+    
+    app.innerHTML = `
+        <div class="cart-page">
+            <h1>Your Rituals</h1>
+            <div class="cart-container">
+                <div class="cart-items">${itemsHtml}</div>
+                <div class="cart-summary">
+                    <h2>Order Summary</h2>
+                    <div class="summary-row"><span>Subtotal</span><span>${formatPrice(subtotal)}</span></div>
+                    <div class="summary-row"><span>Shipping</span><span>${shipping === 0 ? 'Free' : formatPrice(shipping)}</span></div>
+                    <div class="summary-total"><span>Total</span><span>${formatPrice(subtotal + shipping)}</span></div>
+                    <a href="#checkout" class="btn" style="display:block; margin-top:2rem;">Proceed to Checkout</a>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderCheckout() {
+    if(cart.length === 0) { location.hash = '#cart'; return; }
+    document.getElementById('site-header').style.display = 'none';
+    
+    const subtotal = getCartTotal();
+    const shipping = subtotal > 50 ? 0 : 5.00;
+    
+    const itemsHtml = cart.map(item => `
+        <div class="checkout-item">
+            <img src="${item.image}">
+            <div class="checkout-item-details"><div class="checkout-item-title">${item.name}</div><div style="font-size:0.8rem; color:var(--text-secondary)">Qty: ${item.quantity}</div></div>
+            <div style="font-weight:500;">${formatPrice(item.price * item.quantity)}</div>
+        </div>
+    `).join('');
+
+    app.innerHTML = `
+        <header style="padding:1.5rem; text-align:center; border-bottom:1px solid var(--border);"><a href="#home" class="logo">AURA<span>BOTANICA</span></a></header>
+        <div class="checkout-page">
+            <div class="checkout-container">
+                <div class="checkout-form-section">
+                    <form id="checkout-form" onsubmit="handleCheckout(event)">
+                        <h2>Contact Information</h2>
+                        <div class="form-group"><label>Email Address</label><input type="email" id="c-email" required></div>
+                        <h2 style="margin-top:2rem;">Shipping Address</h2>
+                        <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" required></div><div class="form-group"><label>Last Name</label><input type="text" required></div></div>
+                        <div class="form-group"><label>Address</label><input type="text" required></div>
+                        <div class="form-row"><div class="form-group"><label>City</label><input type="text" required></div><div class="form-group"><label>Zip</label><input type="text" required></div></div>
+                        <h2 style="margin-top:2rem;">Payment</h2>
+                        <div class="form-group"><label>Card Number</label><input type="text" placeholder="0000 0000 0000 0000" required></div>
+                        <button type="submit" class="btn" style="width:100%; margin-top:1.5rem; padding:1.2rem;">Place Order</button>
+                    </form>
+                </div>
+                <div class="checkout-summary">
+                    <h2>Order Summary</h2>
+                    <div style="margin-bottom:1.5rem; border-bottom:1px solid var(--border); padding-bottom:1rem;">${itemsHtml}</div>
+                    <div class="summary-row"><span>Subtotal</span><span>${formatPrice(subtotal)}</span></div>
+                    <div class="summary-row"><span>Shipping</span><span>${shipping === 0 ? 'Free' : formatPrice(shipping)}</span></div>
+                    <div class="summary-total" style="margin-top:1rem;"><span>Total</span><span>${formatPrice(subtotal + shipping)}</span></div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+window.handleCheckout = function(e) {
+    e.preventDefault();
+    const email = document.getElementById('c-email').value;
+    const orderId = 'AB-' + Math.floor(Math.random() * 1000000);
+    const total = getCartTotal() + (getCartTotal() > 50 ? 0 : 5);
+    
+    let orders = JSON.parse(localStorage.getItem('auraOrders')) || [];
+    orders.push({ id: orderId, email, items: [...cart], total, date: new Date().toLocaleDateString() });
+    localStorage.setItem('auraOrders', JSON.stringify(orders));
+    localStorage.setItem('latestOrderId', orderId);
+    
+    cart = []; saveCart();
+    location.hash = '#order-received';
+};
+
+function renderOrderReceived() {
+    const orderId = localStorage.getItem('latestOrderId');
+    const orders = JSON.parse(localStorage.getItem('auraOrders')) || [];
+    const order = orders.find(o => o.id === orderId);
+    
+    if(!order) { app.innerHTML = `<div class="order-page"><h2>No recent order found</h2><a href="#shop" class="btn">Shop</a></div>`; return; }
+    
+    app.innerHTML = `
+        <div class="order-page">
+            <div class="order-page-icon"><svg viewBox="0 0 24 24" width="64" height="64" stroke="currentColor" stroke-width="1.5" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+            <h1>Thank you for your order!</h1>
+            <p>Your beautiful botanical goods are being prepared.</p>
+            <div class="order-details-box">
+                <div class="order-meta">
+                    <div class="order-meta-item"><p>Order Number</p><strong>${order.id}</strong></div>
+                    <div class="order-meta-item"><p>Total</p><strong>${formatPrice(order.total)}</strong></div>
+                </div>
+                <h3 style="margin-bottom:1rem; font-size:1.1rem;">Items</h3>
+                ${order.items.map(i => `<div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.95rem;"><span>${i.quantity}x ${i.name}</span><span>${formatPrice(i.price*i.quantity)}</span></div>`).join('')}
+            </div>
+            <div style="margin-top: 3rem; display: flex; justify-content: center; gap: 1rem;">
+                <a href="#home" class="btn btn-outline">Back to Home</a>
+                <a href="#track" class="btn">Track Order</a>
+            </div>
+        </div>
+    `;
+}
+
+function renderTrackOrder() {
+    app.innerHTML = `
+        <div class="order-page" style="margin-top: 4rem;">
+            <h1>Track Your Order</h1>
+            <p>Enter your order number to see the latest updates.</p>
+            <form onsubmit="handleTrack(event)" class="tracking-form" style="max-width:500px; margin: 3rem auto; text-align:left;">
+                <div class="form-group">
+                    <label style="display:block; margin-bottom:0.5rem;">Order Number</label>
+                    <input type="text" id="track-id" placeholder="AB-123456" required style="width:100%; padding:1rem; border:1px solid var(--border); outline:none;">
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Track</button>
+            </form>
+            <div id="track-result" style="text-align:left; max-width:500px; margin:0 auto;"></div>
+        </div>
+    `;
+    const latest = localStorage.getItem('latestOrderId');
+    if(latest) document.getElementById('track-id').value = latest;
+}
+
+window.handleTrack = function(e) {
+    e.preventDefault();
+    const id = document.getElementById('track-id').value.trim();
+    const orders = JSON.parse(localStorage.getItem('auraOrders')) || [];
+    const order = orders.find(o => o.id === id);
+    const res = document.getElementById('track-result');
+    
+    if(order) {
+        res.innerHTML = `
+            <div class="order-details-box" style="margin-top:2rem; padding:2rem;">
+                <h3 style="margin-bottom:1rem;">Order ${order.id}</h3>
+                <p style="color:var(--text-secondary); margin-bottom:2rem;">Placed on ${order.date}</p>
+                <h4>Status: Processing</h4>
+                <div class="tracking-timeline">
+                    <div class="timeline-item active"><h4>Order Confirmed</h4><p>We've received your order.</p></div>
+                    <div class="timeline-item active"><h4>Processing</h4><p>Your items are being packed.</p></div>
+                    <div class="timeline-item"><h4>Shipped</h4><p>Pending carrier pickup.</p></div>
+                </div>
+            </div>
+        `;
+    } else {
+        res.innerHTML = `<div style="background:#fdf5f5; border:1px solid var(--error); padding:1.5rem; color:var(--error); margin-top:2rem;">Order not found.</div>`;
+    }
+};
+
+    </script>
+</body>
+</html>
+
+
